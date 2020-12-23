@@ -1,20 +1,21 @@
 import React, { useCallback, useRef } from 'react';
-import { FiLogIn, FiMail, FiLock } from 'react-icons/fi';
+import { FiMail, FiLock } from 'react-icons/fi';
 import * as Yup from 'yup';
 
 import { Form } from '@unform/web';
 import { FormHandles } from '@unform/core';
-import { Link, useHistory } from 'react-router-dom';
-import logoImg from '../../assets/logo.svg';
+import { useHistory } from 'react-router-dom';
+import logoImg from '../../assets/logoColor.svg';
 import { Container, Content, AnimationContainer, Background } from './styles';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
 import getValidationErrors from '../../utils/getValidationErros';
 import { useAuth } from '../../hooks/auth';
 import { useToast } from '../../hooks/toast';
+import { path } from '../../routes/RoutePaths';
 
 interface SignInFormData {
-  email: string;
+  username: string;
   password: string;
 }
 
@@ -30,16 +31,20 @@ const SignIn: React.FC = () => {
       try {
         formRef.current?.setErrors({});
         const schema = Yup.object().shape({
-          email: Yup.string()
+          username: Yup.string()
             .required('E-mail obrigatório')
             .email('Digite um e-mail válido'),
           password: Yup.string().required('Senha obrigatória'),
         });
 
-        await schema.validate(data, { abortEarly: false });
+        // await schema.validate(data, { abortEarly: false });
 
-        await signIn({ email: data.email, password: data.password });
-        history.push('/dashboard');
+        // await signIn({ username: data.username, password: data.password });
+        await signIn({
+          username: 'admin@ru.unifesspa.edu.br',
+          password: '654321',
+        });
+        history.push(path.restaurante);
       } catch (err) {
         if (err instanceof Yup.ValidationError) {
           const errors = getValidationErrors(err);
@@ -59,10 +64,11 @@ const SignIn: React.FC = () => {
     <Container>
       <Content>
         <AnimationContainer>
-          <img src={logoImg} alt="GoBarber" />
+          <img src={logoImg} alt="WebAdminRU" />
+          <h1>GRUU</h1>
           <Form ref={formRef} onSubmit={handleSubmitForm}>
             <h1>Faça seu logon</h1>
-            <Input name="email" icon={FiMail} placeholder="E-mail" />
+            <Input name="username" icon={FiMail} placeholder="E-mail" />
             <Input
               name="password"
               icon={FiLock}
@@ -70,12 +76,7 @@ const SignIn: React.FC = () => {
               placeholder="Senha"
             />
             <Button type="submit">Entrar</Button>
-            <Link to="forgot-password">Esqueci minha senha</Link>
           </Form>
-          <Link to="/signup">
-            <FiLogIn />
-            Criar conta
-          </Link>
         </AnimationContainer>
       </Content>
       <Background />

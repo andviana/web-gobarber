@@ -42,7 +42,6 @@ export const Content = styled.div`
 
     h1 {
       margin-bottom: 24px;
-      font-size: 20px;
       text-align: left;
     }
 
@@ -76,7 +75,7 @@ export const AvatarInput = styled.div`
     position: absolute;
     width: 48px;
     height: 48px;
-    background: #ff9000;
+    background: #71bd38;
     border-radius: 50%;
     right: 0;
     bottom: 0;
@@ -99,7 +98,7 @@ export const AvatarInput = styled.div`
     }
 
     &:hover {
-      background: ${shade(0.2, '#ff9000')};
+      background: ${shade(0.2, '#71bd38')};
     }
   }
 `;

@@ -44,7 +44,6 @@ export const Container = styled(animated.div)<ContainerProps>`
     flex: 1;
     p {
       margin-top: 4px;
-      font-size: 14px;
       opacity: 0.8;
       line-height: 20px;
     }

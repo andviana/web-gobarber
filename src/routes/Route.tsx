@@ -6,10 +6,14 @@ import {
 } from 'react-router-dom';
 
 import { useAuth } from '../hooks/auth';
+import { useRestaurante } from '../hooks/restaurante';
+import RouteWithLayout from './RouteWithLayout';
+import { path } from './RoutePaths';
 
 interface RouteProps extends ReactDOMRouteProps {
   isPrivate?: boolean;
   component: React.ComponentType;
+  layout?: React.ComponentType;
 }
 
 const Route: React.FC<RouteProps> = ({
@@ -18,16 +22,33 @@ const Route: React.FC<RouteProps> = ({
   ...rest
 }) => {
   const { user } = useAuth();
+  const { restaurante } = useRestaurante();
   return (
     <ReactDOMRoute
       {...rest}
       render={({ location }) => {
-        return isPrivate === !!user ? (
-          <Component />
-        ) : (
+        // redirecionamento normal
+        if (isPrivate === !!user) {
+          if (
+            restaurante.nome ||
+            rest.path === path.restaurante ||
+            !isPrivate
+          ) {
+            return <RouteWithLayout component={Component} {...rest} />;
+          }
+          return (
+            <Redirect
+              to={{
+                pathname: path.restaurante,
+                state: { from: location },
+              }}
+            />
+          );
+        }
+        return (
           <Redirect
             to={{
-              pathname: isPrivate ? '/' : '/dashboard',
+              pathname: isPrivate ? path.login : path.dashboard,
               state: { from: location },
             }}
           />
